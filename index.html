@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高级数字加密工具</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e6e6e6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(to right, #4cc9f0, #4361ee);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #a0a0c0;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .app-description {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 25px auto;
+            max-width: 900px;
+            border-left: 4px solid #4361ee;
+        }
+        
+        .app-description h3 {
+            color: #4cc9f0;
+            margin-bottom: 10px;
+            font-size: 1.4rem;
+        }
+        
+        .app-description p {
+            line-height: 1.6;
+            color: #c0c0e0;
+        }
+        
+        .tools-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .tool-box {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .tool-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        }
+        
+        .tool-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(76, 201, 240, 0.3);
+        }
+        
+        .tool-title i {
+            font-size: 1.8rem;
+            margin-right: 15px;
+            color: #4cc9f0;
+        }
+        
+        .tool-title h2 {
+            font-size: 1.8rem;
+            color: #ffffff;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #b0b0d0;
+        }
+        
+        .input-area {
+            width: 100%;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: #ffffff;
+            font-size: 1.1rem;
+            resize: vertical;
+            min-height: 120px;
+            transition: border 0.3s;
+        }
+        
+        .input-area:focus {
+            outline: none;
+            border-color: #4cc9f0;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 28px;
+            background: linear-gradient(to right, #4361ee, #3a0ca3);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            background: linear-gradient(to right, #3a56d4, #2d0a8a);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+        }
+        
+        .btn i {
+            margin-right: 10px;
+        }
+        
+        .result-area {
+            margin-top: 30px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 100px;
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+        }
+        
+        .result-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #4cc9f0;
+        }
+        
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .result-content {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            word-wrap: break-word;
+        }
+        
+        .example {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .example h4 {
+            color: #a0a0c0;
+            margin-bottom: 10px;
+        }
+        
+        .example code {
+            color: #4cc9f0;
+            font-size: 1.1rem;
+        }
+        
+        .history-container {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 30px;
+            margin-top: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .history-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+        
+        .history-title i {
+            margin-right: 10px;
+            color: #4cc9f0;
+        }
+        
+        .history-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            border-left: 4px solid #4361ee;
+        }
+        
+        .history-type {
+            color: #4cc9f0;
+            font-weight: 600;
+        }
+        
+        .history-content {
+            color: #c0c0e0;
+            max-width: 70%;
+            word-break: break-all;
+        }
+        
+        .history-time {
+            color: #a0a0c0;
+            font-size: 0.9rem;
+        }
+        
+        .empty-history {
+            text-align: center;
+            color: #a0a0c0;
+            padding: 20px;
+        }
+        
+        .mapping-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .mapping-table th, .mapping-table td {
+            padding: 12px 15px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .mapping-table th {
+            background: rgba(67, 97, 238, 0.3);
+            color: #ffffff;
+        }
+        
+        .mapping-table td {
+            color: #c0c0e0;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: #a0a0c0;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .tools-container {
+                flex-direction: column;
+            }
+            
+            .tool-box {
+                min-width: 100%;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>高级数字加密工具</h1>
+            <p class="subtitle">将数字转换为四个随机字母组成的编码，用《》书名号包裹。每个数字对应特定的字母组合，支持批量加密和解密操作。</p>
+        </header>
+        
+        <div class="app-description">
+            <h3>工作原理</h3>
+            <p>本工具使用自定义的字母映射表，将每个数字（0-9）映射到4个特定的英文字母。加密时，每个数字会被替换为一组用《》包裹的四个随机字母。解密时，工具会识别《》中的字母并反向映射为数字。例如：数字"123"可能被加密为"《KXRM》《PDJT》《WVSN》"。</p>
+        </div>
+        
+        <div class="tools-container">
+            <!-- 加密工具 -->
+            <div class="tool-box">
+                <div class="tool-title">
+                    <i class="fas fa-lock"></i>
+                    <h2>加密工具</h2>
+                </div>
+                
+                <div class="input-group">
+                    <label for="encrypt-input">输入要加密的数字（支持多组数字，用空格或换行分隔）</label>
+                    <textarea id="encrypt-input" class="input-area" placeholder="例如：123 456 789 或 
+123
+456
+789"></textarea>
+                </div>
+                
+                <button id="encrypt-btn" class="btn">
+                    <i class="fas fa-key"></i> 加密数字
+                </button>
+                
+                <div class="example">
+                    <h4>示例输入：</h4>
+                    <code>2024 123 9876</code>
+                </div>
+                
+                <div class="result-area">
+                    <div class="result-title">
+                        <span>加密结果</span>
+                        <button class="copy-btn" data-target="encrypt-output">
+                            <i class="fas fa-copy"></i> 复制
+                        </button>
+                    </div>
+                    <div id="encrypt-output" class="result-content">
+                        加密结果将显示在这里
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 解密工具 -->
+            <div class="tool-box">
+                <div class="tool-title">
+                    <i class="fas fa-unlock"></i>
+                    <h2>解密工具</h2>
+                </div>
+                
+                <div class="input-group">
+                    <label for="decrypt-input">输入要解密的字母编码（每组编码用《》包裹）</label>
+                    <textarea id="decrypt-input" class="input-area" placeholder="例如：《KXRM》《PDJT》《WVSN》 或 
+《KXRM》
+《PDJT》
+《WVSN》"></textarea>
+                </div>
+                
+                <button id="decrypt-btn" class="btn">
+                    <i class="fas fa-key"></i> 解密编码
+                </button>
+                
+                <div class="example">
+                    <h4>示例输入：</h4>
+                    <code>《KXRM》《PDJT》《WVSN》《ZQBF》</code>
+                </div>
+                
+                <div class="result-area">
+                    <div class="result-title">
+                        <span>解密结果</span>
+                        <button class="copy-btn" data-target="decrypt-output">
+                            <i class="fas fa-copy"></i> 复制
+                        </button>
+                    </div>
+                    <div id="decrypt-output" class="result-content">
+                        解密结果将显示在这里
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 映射表 -->
+        <div class="tool-box">
+            <div class="tool-title">
+                <i class="fas fa-table"></i>
+                <h2>数字-字母映射表</h2>
+            </div>
+            <p>每个数字映射到四个特定字母，加密时会从这些字母中随机选择：</p>
+            <table class="mapping-table">
+                <thead>
+                    <tr>
+                        <th>数字</th>
+                        <th>对应字母</th>
+                        <th>数字</th>
+                        <th>对应字母</th>
+                    </tr>
+                </thead>
+                <tbody id="mapping-table-body">
+                    <!-- 映射表将通过JavaScript动态生成 -->
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- 操作历史 -->
+        <div class="history-container">
+            <div class="history-title">
+                <i class="fas fa-history"></i>
+                <h2>操作历史</h2>
+            </div>
+            <div class="history-list" id="history-list">
+                <!-- 历史记录将通过JavaScript动态生成 -->
+                <div class="empty-history">暂无操作历史</div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>高级数字加密工具 &copy; 2023 | 使用自定义字母映射进行数字加密/解密</p>
+            <p>每个数字对应四个特定字母，加密结果用《》书名号包裹</p>
+        </footer>
+    </div>
+
+    <script>
+        // 数字到字母的映射表（每个数字对应4个字母）
+        const numberToLettersMap = {
+            '0': ['KXRM', 'ABCT', 'ZQBF', 'YVWP'],
+            '1': ['PDJT', 'LMNO', 'GHIJ', 'UVSX'],
+            '2': ['WVSN', 'DEFG', 'QRST', 'MNOP'],
+            '3': ['FHKL', 'IJKL', 'OPQR', 'CDAB'],
+            '4': ['YZAB', 'WXYZ', 'EFGH', 'STUV'],
+            '5': ['MNOQ', 'PQRS', 'TUVW', 'ABCD'],
+            '6': ['CDEF', 'GHJK', 'LMNP', 'QRST'],
+            '7': ['UVWX', 'YZAB', 'CDEF', 'GHIJ'],
+            '8': ['IJKM', 'NOPQ', 'RSTU', 'VWXY'],
+            '9': ['ZABC', 'DEFH', 'IJKL', 'MNOP']
+        };
+        
+        // 字母到数字的反向映射表（通过加密表生成）
+        let lettersToNumberMap = {};
+        
+        // 初始化反向映射表
+        function initReverseMap() {
+            for (const [number, letters] of Object.entries(numberToLettersMap)) {
+                letters.forEach(letterCode => {
+                    lettersToNumberMap[letterCode] = number;
+                });
+            }
+        }
+        
+        // 初始化
+        initReverseMap();
+        
+        // 生成映射表HTML
+        function generateMappingTable() {
+            const tableBody = document.getElementById('mapping-table-body');
+            tableBody.innerHTML = '';
+            
+            // 创建5行，每行2个数字
+            for (let i = 0; i < 5; i++) {
+                const row = document.createElement('tr');
+                
+                // 第一列数字
+                const num1 = i;
+                const td1 = document.createElement('td');
+                td1.textContent = num1;
+                row.appendChild(td1);
+                
+                const td2 = document.createElement('td');
+                td2.textContent = numberToLettersMap[num1].join(', ');
+                row.appendChild(td2);
+                
+                // 第二列数字
+                const num2 = i + 5;
+                const td3 = document.createElement('td');
+                td3.textContent = num2;
+                row.appendChild(td3);
+                
+                const td4 = document.createElement('td');
+                td4.textContent = numberToLettersMap[num2].join(', ');
+                row.appendChild(td4);
+                
+                tableBody.appendChild(row);
+            }
+        }
+        
+        // 加密函数
+        function encryptNumbers(input) {
+            // 清理输入：移除非数字字符，只保留数字和空格
+            const cleanedInput = input.replace(/[^\d\s]/g, '');
+            if (!cleanedInput.trim()) {
+                return '';
+            }
+            
+            // 分割数字
+            const numbers = cleanedInput.split(/\s+/).filter(num => num.length > 0);
+            
+            // 对每个数字进行加密
+            return numbers.map(num => {
+                return num.split('').map(digit => {
+                    // 获取数字对应的字母列表
+                    const letters = numberToLettersMap[digit] || ['AAAA'];
+                    // 随机选择一个字母组合
+                    const randomIndex = Math.floor(Math.random() * letters.length);
+                    return `《${letters[randomIndex]}》`;
+                }).join('');
+            }).join(' ');
+        }
+        
+        // 解密函数
+        function decryptLetters(input) {
+            // 使用正则表达式匹配《》中的内容
+            const pattern = /《([A-Z]{4})》/g;
+            const matches = input.match(pattern);
+            
+            if (!matches) {
+                return '';
+            }
+            
+            // 对每个匹配进行解密
+            return matches.map(match => {
+                // 提取《》内的字母
+                const letters = match.substring(1, match.length - 1);
+                // 查找对应的数字
+                return lettersToNumberMap[letters] || '?';
+            }).join('');
+        }
+        
+        // 添加历史记录
+        function addHistory(type, input, output) {
+            const historyList = document.getElementById('history-list');
+            const emptyHistory = historyList.querySelector('.empty-history');
+            
+            if (emptyHistory) {
+                emptyHistory.remove();
+            }
+            
+            const historyItem = document.createElement('div');
+            historyItem.className = 'history-item';
+            
+            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            historyItem.innerHTML = `
+                <div>
+                    <span class="history-type">${type === 'encrypt' ? '加密' : '解密'}</span>
+                    <span class="history-content">${input} → ${output}</span>
+                </div>
+                <div class="history-time">${time}</div>
+            `;
+            
+            // 将新记录添加到顶部
+            historyList.prepend(historyItem);
+            
+            // 限制历史记录数量
+            const items = historyList.querySelectorAll('.history-item');
+            if (items.length > 10) {
+                items[items.length - 1].remove();
+            }
+        }
+        
+        // 复制到剪贴板
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('已复制到剪贴板！');
+            }).catch(err => {
+                console.error('复制失败: ', err);
+                // 降级方案
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('已复制到剪贴板！');
+            });
+        }
+        
+        // DOM加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            // 生成映射表
+            generateMappingTable();
+            
+            // 加密按钮事件
+            document.getElementById('encrypt-btn').addEventListener('click', () => {
+                const input = document.getElementById('encrypt-input').value;
+                const output = encryptNumbers(input);
+                
+                if (output) {
+                    document.getElementById('encrypt-output').textContent = output;
+                    addHistory('encrypt', input.replace(/\s+/g, ' ').substring(0, 30) + (input.length > 30 ? '...' : ''), output.substring(0, 30) + (output.length > 30 ? '...' : ''));
+                } else {
+                    document.getElementById('encrypt-output').textContent = '请输入有效的数字';
+                }
+            });
+            
+            // 解密按钮事件
+            document.getElementById('decrypt-btn').addEventListener('click', () => {
+                const input = document.getElementById('decrypt-input').value;
+                const output = decryptLetters(input);
+                
+                if (output) {
+                    document.getElementById('decrypt-output').textContent = output;
+                    addHistory('decrypt', input.replace(/\s+/g, ' ').substring(0, 30) + (input.length > 30 ? '...' : ''), output.substring(0, 30) + (output.length > 30 ? '...' : ''));
+                } else {
+                    document.getElementById('decrypt-output').textContent = '未找到有效的字母编码，请确保编码格式为《四个大写字母》';
+                }
+            });
+            
+            // 复制按钮事件
+            document.querySelectorAll('.copy-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const targetId = btn.getAttribute('data-target');
+                    const text = document.getElementById(targetId).textContent;
+                    if (text && !text.includes('将显示在这里') && !text.includes('请输入')) {
+                        copyToClipboard(text);
+                    }
+                });
+            });
+            
+            // 为输入框添加示例数据（方便测试）
+            document.getElementById('encrypt-input').value = '2024 123 9876';
+            document.getElementById('decrypt-input').value = '《KXRM》《PDJT》《WVSN》《ZQBF》';
+            
+            // 自动执行一次加密解密作为示例
+            setTimeout(() => {
+                document.getElementById('encrypt-btn').click();
+                document.getElementById('decrypt-btn').click();
+            }, 500);
+        });
+    </script>
+</body>
+</html>
